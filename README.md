@@ -422,8 +422,7 @@ STM32-Water-Tank-Control-System
 # Authors
 
 - Arghavan Memari
-- Erfan Faghihi
-- Alireza Montajab
+
 
 
 Academic Project  
