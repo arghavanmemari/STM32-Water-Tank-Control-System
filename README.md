@@ -1,156 +1,215 @@
-# STM32 Water Tank Control System
+# STM32-Based Intelligent Water Tank Control System
 
-## Intelligent Embedded Control System for Water Tank Monitoring and Automation
+<p align="center">
+  <img src="images/circuit-overview.png" width="800">
+</p>
 
-This project presents an embedded water tank monitoring and control system based on the **STM32F103C8 microcontroller**.
+<h3 align="center">
+An Embedded Automation System for Real-Time Water Level and Temperature Monitoring
+</h3>
 
-The system integrates multiple sensors, actuators, and user interfaces to automatically monitor water level and temperature, control a DC pump and heating element, and provide real-time feedback through an LCD interface.
+<p align="center">
+STM32F103C8 | Embedded C | Proteus Simulation | Sensor Integration | PWM Control
+</p>
 
-The complete system was designed, implemented, and validated through **Proteus simulation**, with embedded firmware developed in **C using STM32 HAL libraries**.
+
+## Overview
+
+This project presents the design and implementation of an embedded automation system for intelligent water tank management using the **STM32F103C8 microcontroller**.
+
+The system is designed to monitor water level and temperature conditions in real time and automatically control actuators based on sensor feedback.
+
+The project demonstrates the complete embedded system development process, including hardware design, firmware development, peripheral configuration, and simulation-based validation.
+
+The complete system was implemented using **Embedded C** and verified in the **Proteus simulation environment**.
+
 
 ---
 
-## Project Objectives
+# Objectives
 
-The main objective of this project is to design an automated control system capable of:
+The main objective of this project was to develop a reliable microcontroller-based control system capable of:
 
-- Monitoring water level in real time
+- Monitoring water level automatically
+- Controlling water pump operation
 - Measuring temperature conditions
-- Automatically controlling water pumping
-- Regulating heater power using PWM
-- Providing user interaction through keypad input
-- Displaying system parameters on an LCD
-- Managing system time using RTC
-- Communicating system status through UART
+- Regulating heater output
+- Providing real-time user feedback
+- Allowing user interaction through an input interface
 
----
-
-# System Features
-
-### Water Level Monitoring
-- Ultrasonic distance measurement using **HC-SR04 sensor**
-- Real-time calculation of tank water level
-- Automated pump control based on predefined conditions
-
-### Temperature Monitoring and Control
-- Temperature sensing using **LM35 analog sensor**
-- Heater control using PWM-based power regulation
-- Temperature parameter adjustment through user interface
-
-### Motor and Actuator Control
-- DC pump control using **L298 motor driver**
-- PWM-based speed regulation
-- Automated water circulation management
-
-### User Interface
-- LCD-based real-time monitoring
-- Keypad menu for parameter configuration
-- User-adjustable control thresholds
-
-### Time and Communication
-- RTC module for time management
-- UART communication for system status monitoring
-
----
-
-# Hardware Components
-
-| Component | Purpose |
-|---|---|
-| STM32F103C8 | Main microcontroller and control unit |
-| HC-SR04 | Ultrasonic water level measurement |
-| LM35 | Temperature sensing |
-| L298 | DC motor driver |
-| DC Motor | Water pump actuator |
-| Heater Resistance | Temperature control actuator |
-| LM041L LCD | Display interface |
-| Keypad | User input |
-| RTC Module | Time management |
 
 ---
 
 # System Architecture
 
-```
-              +----------------+
-              |    HC-SR04     |
-              | Water Level    |
-              |    Sensor      |
-              +-------+--------+
-                      |
-                      |
-                      v
+<p align="center">
+  <img src="images/proteus.png" width="900">
+</p>
 
-+-------------+   +----------------+   +-------------+
-|   LM35      |-->|                |-->|   LCD       |
-| Temperature |   |    STM32       |   | Display     |
-|   Sensor    |   |   F103C8       |   +-------------+
-+-------------+   |                |
-                  |                |
-                  +-------+--------+
-                          |
-          +---------------+---------------+
-          |                               |
-          v                               v
-    +-----------+                   +-------------+
-    |  L298     |                   |   Heater    |
-    | Motor     |                   |   Control   |
-    | Driver    |                   |   PWM       |
-    +-----------+                   +-------------+
-          |
-          v
-      Water Pump
+
+The system follows a sensor-controller-actuator architecture:
+
 ```
+                  Sensors
+
+        +----------------------+
+        |                      |
+        |                      |
+  HC-SR04 Water Level     LM35 Temperature
+        |                      |
+        +----------+-----------+
+                   |
+                   |
+                   v
+
+          STM32F103C8 Controller
+
+                   |
+        +----------+----------+
+        |                     |
+        v                     v
+
+   Pump Control          Heater Control
+   (L298 Driver)         (PWM Output)
+
+        |
+        v
+
+    User Interface
+    LCD + Keypad
+```
+
 
 ---
 
-# Software Implementation
+# Hardware Components
 
-## Development Environment
+| Component | Description |
+|---|---|
+| STM32F103C8 | Main microcontroller |
+| HC-SR04 | Ultrasonic water level sensor |
+| LM35 | Temperature measurement sensor |
+| L298 | DC motor driver |
+| DC Motor | Water pump actuator |
+| Heater | Temperature control actuator |
+| LCD | Real-time information display |
+| Keypad | User interaction |
+| RTC Module | Time management |
 
-- Programming Language: **Embedded C**
-- Microcontroller: **STM32F103C8**
-- Framework: **STM32 HAL Library**
-- Simulation Platform: **Proteus**
-- IDE Compatibility: STM32CubeIDE / Keil
 
 ---
 
-# Firmware Overview
+# Main Features
 
-The firmware is responsible for:
+## Water Level Monitoring
 
-- Initializing STM32 peripherals
-- Reading sensor values
-- Processing control logic
-- Generating PWM signals
-- Updating LCD information
-- Handling keypad input
-- Managing RTC functionality
-- Sending status information through UART
+The system uses an ultrasonic sensor to measure the distance between the sensor and the water surface.
 
-Main peripherals used:
+The measured value is processed by the STM32 controller to determine the tank condition and control the pump automatically.
 
+
+## Temperature Measurement
+
+Temperature data is acquired using the LM35 analog sensor.
+
+The microcontroller reads the analog signal through ADC and processes the temperature information.
+
+
+## Automatic Pump Control
+
+Based on the water level status, the controller generates appropriate signals to operate the water pump through the motor driver circuit.
+
+
+## PWM-Based Heater Control
+
+The heater is controlled using PWM signals generated by the STM32 timer peripherals.
+
+This allows adjustable power control according to system requirements.
+
+
+## User Interface
+
+The system provides:
+
+- LCD-based monitoring
+- Keypad input
+- Real-time parameter display
+
+
+## UART Communication
+
+UART communication is implemented for system monitoring and debugging purposes.
+
+
+---
+
+# Firmware Design
+
+The firmware was developed using:
+
+- Embedded C
+- STM32 HAL Library
+- STM32F103C8 peripherals
+
+
+Implemented peripherals:
+
+- GPIO
 - ADC
 - Timers
 - PWM
-- GPIO
 - UART
 - RTC
 
+
+Main firmware workflow:
+
+```
+Initialize peripherals
+
+        ↓
+
+Read sensor values
+
+        ↓
+
+Process control algorithm
+
+        ↓
+
+Generate actuator commands
+
+        ↓
+
+Update user interface
+
+        ↓
+
+Repeat continuously
+```
+
+
 ---
 
-# Simulation
+# Simulation and Validation
 
-The complete circuit was simulated using Proteus.
+The complete embedded system was designed and tested using **Proteus simulation**.
 
-Included in this repository:
+The simulation validates:
 
-- Proteus simulation project
-- Circuit design
-- Compiled HEX firmware
-- Simulation screenshots
-- Demonstration video
+- Sensor data acquisition
+- Control logic operation
+- Pump switching behavior
+- Heater control
+- LCD communication
+
+
+Project demonstration:
+
+```
+video/dig.wmv
+```
+
 
 ---
 
@@ -158,69 +217,92 @@ Included in this repository:
 
 ```
 STM32-Water-Tank-Control-System
+
 │
 ├── firmware
 │   ├── main.c
 │   └── proje.hex
 │
 ├── simulation
-│   └── Proteus project files
+│   └── proje.pdsprj
 │
 ├── images
 │   ├── circuit-overview.png
 │   └── proteus.png
 │
 ├── video
-│   └── demonstration video
+│   └── dig.wmv
 │
 └── documentation
-    └── project report
+    └── project-report-fa.pdf
 ```
 
----
-
-# Demonstration
-
-The simulation demonstrates:
-
-- Water level detection
-- Automatic pump operation
-- Temperature monitoring
-- Heater control
-- LCD status display
-- User parameter adjustment
 
 ---
 
-# Skills Demonstrated
+# Engineering Skills Demonstrated
 
 This project demonstrates practical experience in:
 
 - Embedded Systems Design
 - STM32 Microcontroller Programming
-- Sensor Integration
-- Peripheral Configuration
-- PWM Control Techniques
-- Digital Control Systems
+- Sensor Interfacing
+- ADC Data Acquisition
+- PWM Control
+- Motor Driver Integration
+- Real-Time Embedded Programming
 - Hardware Simulation
 - Firmware Development
+
+
+---
+
+# Technical Challenges
+
+### Multi-Sensor Integration
+
+Integrating multiple sensors and processing their data in a real-time embedded environment.
+
+
+### Hardware–Software Co-Design
+
+Combining electronic components with firmware logic to create a complete automation system.
+
+
+### Real-Time Control
+
+Developing a continuous control loop capable of responding to environmental changes.
+
 
 ---
 
 # Future Improvements
 
-Possible improvements:
+Possible future developments include:
 
-- Adding IoT connectivity using ESP32/Wi-Fi module
-- Cloud-based monitoring dashboard
 - Real hardware implementation
-- Advanced control algorithms (PID/Fuzzy Control)
-- Mobile application interface
+- IoT connectivity using ESP32
+- Remote monitoring dashboard
+- Cloud-based data storage
+- Mobile application integration
+- Advanced control algorithms such as PID control
+
+
+---
+
+# Documentation
+
+Additional project documentation is available:
+
+```
+documentation/project-report-fa.pdf
+```
+
 
 ---
 
 # Author
 
-**Arghavan Memari**
+## Arghavan Memari
 
-Embedded Systems | Microcontroller Programming | IoT Applications
+Embedded Systems | Microcontrollers | IoT Applications
